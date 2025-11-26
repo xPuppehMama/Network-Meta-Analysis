@@ -1,0 +1,176 @@
+---
+title: "assessment"
+author: "My My Tran"
+date: "2024-06-14"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(netmeta)
+chronic_migraine_dataset <- read_excel("Chronic_Migraine_Dataset.xlsx")
+```
+
+```{r}
+# transform dataset to separate treatment type and placebo
+transformed_migraine_dataset <- chronic_migraine_dataset |>
+  group_by(study, year) |>
+  mutate(trt1name = ifelse(trt != "Placebo", trt, NA),
+         trt2name = ifelse(trt == "Placebo", "Placebo", NA)) |>
+  summarise_all(list(~ first(na.omit(.)))) 
+```
+
+```{r}
+transformed_migraine_dataset$y <- as.numeric(transformed_migraine_dataset$y)
+transformed_migraine_dataset$se <- as.numeric(transformed_migraine_dataset$se)
+```
+
+```{r}
+transformed_migraine_dataset$se <- round(transformed_migraine_dataset$se, digits = 5)
+
+transformed_migraine_dataset[12, "trt2name"] <- "Placebo & Eptinezumab"
+```
+
+
+```{r}
+crisp_add <- data.frame(study = "Crisp", year = "2012", y = -4.90, se = 0.5669, trt = "Eptinezumab", na = 3, trt1name = "Eptinezumab", trt2name = "Placebo & Galcanezumab")
+
+transformed_migraine_dataset <- transformed_migraine_dataset |>
+  bind_rows(crisp_add) |>
+  arrange(year)
+
+```
+
+
+The reference group for comparisons is Glacu.
+
+The error you're encountering in the netmeta function is due to the incorrect specification of the number of treatment comparisons for the study named "Crisp". In a three-arm trial, the number of comparisons is three, and you need to provide data for each pairwise comparison.
+
+Here, for the study "Crisp", the number of treatments is three, which means there should be three pairwise comparisons for the study:
+
+Galcanezumab vs Placebo
+Galcanezumab vs Eptinezumab
+Placebo vs Eptinezumab
+```{r}
+nma <- netmeta(TE = y, seTE = se, treat1 = trt1name, treat2 = trt2name, studlab = study, data = transformed_migraine_dataset, sm = "MD")
+summary(nma)
+```
+
+The edges represent the weight of evidence (number of studies). This is the direct evidence graph.
+Erenumab and Galcanezumab have the most amount of studies.
+
+
+```{r}
+netgraph(nma, plastic = FALSE, points = TRUE, col = 'darkblue', thickness = "number.of.studies", col.points = 'red')
+```
+
+```{r}
+# Creating the corrected dataset
+transformed_migraine_dataset <- data.frame(
+  study = c("Watson", "Broadman", "Jones", "Evans", "Cleverley", "Gaudi", "Cederic", "Worsely", "Shirley", "Wellington", "Brian", "Crisp", "Crisp", "Crisp", "Lucius"),
+  year = c(1990, 1995, 1995, 1996, 1999, 2001, 2002, 2002, 2003, 2005, 2010, 2012, 2012, 2012, NA),
+  y = c(-3.00, -3.20, -3.60, -3.82, 3.80, -4.09, -4.30, -4.10, -4.50, -4.34, -3.77, -9.10, -4.20, -4.90, -5.30),
+  se = c(0.2273, 0.4579, NA, 0.1992, 0.5356, NA, 0.2014, 0.2141, 0.2624, 0.2435, 0.2078, 0.7401, 0.4758, 0.5669, 0.5500),
+  trt1name = c("Botox A", "Galcanezumab", "Galcanezumab", "Galcanezumab", "Galcanezumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Galcanezumab", "Galcanezumab", "Eptinezumab", "Eptinezumab"),
+  trt2name = c("Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Eptinezumab", "Placebo", "Placebo"),
+  na = c(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2)
+)
+nma <- netmeta(TE = y, seTE = se, treat1 = trt1name, treat2 = trt2name, studlab = study, data = transformed_migraine_dataset, sm = "MD")
+print(nma)
+```
+
+```{r}
+netgraph(nma, plastic = FALSE, points = TRUE, col = 'darkblue', thickness = "number.of.studies", col.points = 'red')
+```
+
+
+
+Each comparison in the three-arm study should have its own effect size and standard error.
+
+```{r}
+
+
+# Creating the corrected dataset
+transformed_migraine_dataset <- data.frame(
+  study = c("Watson", "Broadman", "Jones", "Evans", "Cleverley", "Gaudi", "Cederic", "Worsely", "Shirley", "Wellington", "Brian", "Crisp", "Crisp", "Crisp", "Lucius"),
+  year = c(1990, 1995, 1995, 1996, 1999, 2001, 2002, 2002, 2003, 2005, 2010, 2012, 2012, 2012, NA),
+  y = c(-3.00, -3.20, -3.60, -3.82, 3.80, -4.09, -4.30, -4.10, -4.50, -4.34, -3.77, -4.20, 0.70, -4.90, -5.30),
+  se = c(0.2273, 0.4579, NA, 0.1992, 0.5356, NA, 0.2014, 0.2141, 0.2624, 0.2435, 0.2078, 0.4758, 0.7401, 0.5669, 0.5500),
+  trt1name = c("Botox A", "Galcanezumab", "Galcanezumab", "Galcanezumab", "Galcanezumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Erenumab", "Galcanezumab", "Galcanezumab", "Eptinezumab", "Eptinezumab"),
+  trt2name = c("Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Placebo", "Eptinezumab", "Placebo", "Placebo"),
+  na = c(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 2)
+)
+
+# Run the netmeta analysis
+nma <- netmeta(TE = y, seTE = se, treat1 = trt1name, treat2 = trt2name, studlab = study, data = transformed_migraine_dataset, sm = "MD")
+print(nma)
+
+```
+
+
+
+```{r}
+# Basic network effects forest plot
+forest(nma, ref = "Galcanezumab")
+```
+
+A 3-arm comparison in network meta-analysis refers to a situation where a single clinical trial includes three different intervention groups being compared simultaneously.
+
+This can improve the precision of the estimates for indirect comparisons.
+
+Reduction in Bias: Since all three interventions are compared within the same trial, this reduces the potential for bias that might arise from differences in study populations, settings, or methodologies when comparing results from different 2-arm trials.
+
+Next we infer effects for indirect comparisons.
+
+Create the plot with the network effect estimates from the net object 
+The Network effects contain both the direct and indirect evidence and can be considered the highest order of evidence base if the assumptions of the analysis have been met.
+
+Keep in mind that these comparisons are network wise and the estimates are network effects, created using combined direct and indirect effects. 
+
+Lets talk about the interpretation for a bit. Treatment A and C have best network effects in terms of the risk reduction with RR = 0.43 [0.27 - 0.70] and RR = 0.39 [0.22-0.71]. Network effects have a higher level of credibility compared to the direct comparisons and pairwise meta-analysis. Given that the RRR or risk reduction effects were 57% and 61% for the hypothetical disease or a 'negative' event such as mortality treatments A and C performed the best and the magnitude would be Clinically meaningful for most Clinical Research areas (there are exceptions).
+
+the trustworthiness to the results and indirect and direct evidence may serve a special form of sensitivity analysis in addition to methodological sensitivity analysis makes the Network Meta-analysis the top of the comparative evidence estimation fields in Clinical trial Biostatistics.
+
+But it there is another equally important reason why NMA is of huge value in Clinical trials field. Some Clinical trials designs are just not feasible in the real word. Some are feasible but not performed and would take a lot of time to perform. So the direct evidence gaps that exist by having no direct comparisons for specific clinical trials can be partially estimated using the indirect evidence approach. Of course having the direct evidence, especially from Randomized clinical trials would be better, but in all situations where this is not feasible, indirect evidence is the next best approach. 
+
+What is the comparative effectiveness between different treatments in a specific biomedical field?
+
+Setting the reference as Galcanezumab, Epitinezumab has the best network effects with MD = -3.36 [-6.55;-0.16].
+
+```{r}
+# Basic network effects forest plot
+forest(nma, ref = "Galcanezumab")
+```
+In frequentist statistics, the parameters that represent the characteristics of the population are fixed, but an unknown constant can be inferred using the likelihood of the observed data. In other words, the probability that the research hypothesis is true within the observed data is specified; thus, the frequentist framework can only help decide whether to accept or reject a hypothesis based on the statistical significance level—based on estimation.15 16 The results from an analysis using the frequentist approach are given as a point estimate (eg, OR, relative risk or mean difference) with a 95% CI.
+
+Collection of trials, where nodes represent interventions and edges represent at least one direct comparison between interventions to compare all treatments connected to each other in a network.
+
+NMA provides observational evidence because treatments being compared have not been randomized across the individual trials.
+
+Graphical visualization of the network
+The nodes and edges are proportional to information we are given
+
+Report estimates for all pairwise treatment comparisons with their corresponding uncertainty intervals
+
+Forest plot with treatment effects estimates for the pairwise comparisons
+
+
+NMA - treatments included in the network are jointly randomizable
+main assumption of transitivity - different treatments, similar in severity of illness at baseline, treatment dose or study quality
+other assumptions are congruence and consistency
+
+
+# References
+
+https://cran.r-project.org/web/packages/netmeta/netmeta.pdf
+https://www.youtube.com/watch?v=xaCEiB9MI6c
+https://darkomedin.com/network-meta-analysis-in-r1
+https://www.linkedin.com/pulse/network-meta-analysis-r-part-ii-effects-forest-plots-darko-medin-qvbef/ 
+https://ebm.bmj.com/content/28/3/204.long
+https://www.youtube.com/watch?v=-2x2a3JDOlM
+https://www.youtube.com/watch?v=VFIUR1yJIo4
+Fawsitt, et al
+
+
+

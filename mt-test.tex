@@ -1,0 +1,527 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{241,243,245}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.40,0.45,0.13}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\ExtensionTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.28,0.35,0.67}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.46,0.62}{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\NormalTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.68,0.00,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{\textcolor[rgb]{0.00,0.23,0.31}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.07,0.07,0.07}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.13,0.47,0.30}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.37,0.37,0.37}{\textit{#1}}}
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\section{Introduction}\label{introduction}
+
+Network Meta-Analysis (NMA) allows for the comparative relative efficacy
+and acceptability of interventions, such as galcanezumab and other
+treatments for chronic migraine, through randomized controlled trials
+(RCTs) {[}1{]}. These clinical trials form a network of observational
+evidence, allowing for both direct and indirect comparisons. Prior to
+this NMA, a feasibility assessment was completed, revealing minimal
+concerns regarding heterogeneity across studies, implying that an NMA is
+appropriate. This NMA evaluates the reduction in monthly migraine days
+for galcanezumab in comparison to other treatments, including key
+comparators such as Botox A, eptinezumab, erenumab, and placebo.
+
+\section{Data and Methods}\label{data-and-methods}
+
+The dataset is based on multiple 12-week observational studies from
+clinical trials, examining the reduction in monthly migraine days for
+participants from baseline to Week 12. To conduct the NMA, the data is
+transformed into a pairwise format, separating the treatment types into
+treatment 1 and treatment 2. These studies provide direct comparisons
+against the placebo. The placebo is to be used as a common comparator to
+estimate the relative efficacy between two interventions indirectly.
+
+When conducting the NMA, comparisons with missing treatment effect point
+estimates (TE), seTE, or zero TE values are not considered in the
+analysis. Therefore, two studies, Jones (1995) and Gaudi (2001), are
+removed, which results in the loss of evidence for the treatments
+galcanezumab and erenumab, respectively. Additionally, there is one
+three-arm study in this dataset. Since each comparison in the three-arm
+study should have its own effect size and standard error, we provide
+data for each pairwise comparison {[}2{]}. This includes (1)
+galcanezumab vs placebo, (2) galcanezumab vs eptinezumab, and (3)
+placebo vs eptinezumab. Given the MD and SE between galcanezumab and
+placebo, it is estimated that the MD between galcanezumab and
+eptinezumab is 0.70 and the SE is 0.7401. In total, the NMA includes
+data from 11 RCTs, comprising of 13 pairwise comparisons among 5
+different treatments (Botox A, eptinezumab, erenumab, galcanezumab, and
+placebo).
+
+A Frequentist random effects model was used to perform the NMA, to
+account for heterogeneity or variability across studies, even if
+minimal. The random effects model allows for the possibility that true
+effect sizes vary across studies, due to difference in patient
+populations, methodologies, and other treatment-influencing factors
+{[}3{]}. Assumptions of the Frequentist method includes transitivity,
+where treatments are similar in severity of chronic migraines, treatment
+dose or study quality, as well as congruence and consistency {[}4{]}.
+The netmeta package in R was used to conduct the NMA, encompassing
+tables and figures of the network, a forest plot, rankogram, and surface
+under the cumulative ranking (SUCRA) (all included in the Appendix). The
+chosen reference treatment, or the baseline against which all other
+treatments are compared, is the placebo. This allows us to see how
+galcanezumab and other treatments compare to this same baseline {[}5{]}.
+
+\section{Results}\label{results}
+
+Shown in the appendix, the four treatments (Botox A, eptinezumab,
+erenumab, and galcanezumab) reveal significance in reducing the monthly
+migraine days (alpha = 0.05). Eptinezumab and erenumab demonstrate the
+largest effects (p \textless{} 0.001), followed by Botox A and
+galcanezumab. Heterogeneity was detected within and between designs (p
+\textless{} 0.05), suggesting there is variability in treatment effects
+across studies.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics{mt-test_files/figure-pdf/fig-1-1.pdf}
+
+}
+
+\caption{\label{fig-1}A forest plot of treatment effect estimates for
+all pairwise comparisons along with their corresponding 95\% confidence
+intervals, based on the standardized mean differences. Larger confidence
+intervals indicate less precision, while smaller intervals indicate
+greater precision.}
+
+\end{figure}%
+
+As all treatments have point estimates to the left of the line of no
+effect (do not cross on/near the line of no effect), this reveals that
+all four treatments perform better than the comparator, placebo.
+Eptinezumab shows the narrowest confidence interval {[}-5.65; -0.35{]},
+indicating a significant reduction in monthly migraine days.
+
+\begin{longtable}[]{@{}lr@{}}
+\caption{Table of SUCRA (Surface Under the Cumulative Ranking)
+probabilities for each treatment. Higher SUCRA values indicate greater
+efficacy of a treatment relative to others.}\tabularnewline
+\toprule\noalign{}
+Treatment & SUCRA \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+Treatment & SUCRA \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Eptinezumab & 0.8562 \\
+Erenumab & 0.7888 \\
+Botox A & 0.5317 \\
+Galcanezumab & 0.3198 \\
+Placebo & 0.0035 \\
+\end{longtable}
+
+SUCRA provides rank probabilities for which interventions performs the
+best in terms of efficacy from the NMA. According to the results, the
+treatment with the highest probability, ranking first, is eptinezumab
+(SUCRA = 0.8562), relative to other treatments in the study. Erenumab
+closely follows (SUCRA = 0.7888).
+
+The results of this NMA are consistent with existing literature, in
+using anti-CGRP (Calcitonin Gene-Related Peptide) monoclonal antibodies
+in managing chronic migraines. A study from 2023 found that ``for both
+episodic migraine and chronic migraine, STC (simulated treatment
+comparison) analysis indicated that eptinezumab treatment was favorable
+over other anti-CGRP monoclonal antibodies in terms of reduction in
+monthly migraine days'' (Fawsitt, et al.). Additionally, another study,
+revealed that galcanezumab (120 mg) had considerable reduction in mean
+migraine days, followed by eptinezumab and erenumab. However, while
+galcanezumab (120 mg) showed the most substantial reduction, eptinezumab
+(100 mg) had a a more favorable safety profile (Puliappadamb, et al.).
+
+Overall, anti-CGRP monoclonal antibodies have high efficacy in reducing
+chronic migraines, with Botox A and placebo showing less effectiveness.
+This NMA provides evidence (at a significant level) for the efficacy of
+galcanezumab in reducing monthly migraine days in patients with chronic
+migraines. However, when comparing the relative effectiveness of other
+treatments, eptinezumab and erenumab were favored.
+
+\subsection{Concerns Regarding the
+Dataset}\label{concerns-regarding-the-dataset}
+
+In constructing the NMA, studies with missing treatment effect point
+estimates in the dataset were not considered, including Jones (1995) and
+Gaudi (2001) for the treatments galcanezumab and erenumab. One concern
+from the dataset is heterogeneity, indicated by the heterogeneity test
+results. This variability suggests there were differences in treatment
+effects across studies, possibly due to differences in study populations
+and methodologies. To address this issue, a random-effects model was
+used rather than a fixed-effects model. A simplified assumption made for
+the NMA was that the outcome of mean difference (MD) in monthly migraine
+days was consistent across the RCTs. Additionally, two assumptions of
+NMA (transitivity and coherence) depend on the consistency between the
+direct and indirect evidence for the same treatment comparison.
+
+\subsection{Interpretation of any treatment ranking
+statistics}\label{interpretation-of-any-treatment-ranking-statistics}
+
+The Surface Under the Cumulative Ranking (SUCRA) values quantify the
+probabilities of interventions performing best in terms of efficacy
+within the NMA, on a ranking scale. These values are generated based on
+1000 simulations from the NMA, ranging from 0 to 1. Higher SUCRA values
+indicate greater efficacy of a treatment relative to other treatments in
+the analysis. In this NMA, Eptinezumab had the highest SUCRA value
+(0.8562), revealing itself to be the most effective treatment option for
+reducing monthly migraine days. Following closely, erenumab had a high
+SUCRA value (0.7888), followed by Botox A (0.5317) and galcanezumab
+(0.3198), and placebo had the lowest probability (0.0035). These
+rankings can be used to compare the relative effectiveness of these
+treatments.
+
+\section{Appendix}\label{appendix}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\FunctionTok{library}\NormalTok{(readxl)}
+\FunctionTok{library}\NormalTok{(netmeta)}
+\NormalTok{chronic\_migraine\_dataset }\OtherTok{\textless{}{-}} \FunctionTok{read\_excel}\NormalTok{(}\StringTok{"Chronic\_Migraine\_Dataset.xlsx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# transform dataset to separate treatment type and placebo}
+\NormalTok{transformed\_migraine\_dataset }\OtherTok{\textless{}{-}}\NormalTok{ chronic\_migraine\_dataset }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{group\_by}\NormalTok{(study, year) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{trt1name =} \FunctionTok{ifelse}\NormalTok{(trt }\SpecialCharTok{!=} \StringTok{"Placebo"}\NormalTok{, trt, }\ConstantTok{NA}\NormalTok{),}
+         \AttributeTok{trt2name =} \FunctionTok{ifelse}\NormalTok{(trt }\SpecialCharTok{==} \StringTok{"Placebo"}\NormalTok{, }\StringTok{"Placebo"}\NormalTok{, }\ConstantTok{NA}\NormalTok{)) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{summarise\_all}\NormalTok{(}\FunctionTok{list}\NormalTok{(}\SpecialCharTok{\textasciitilde{}} \FunctionTok{first}\NormalTok{(}\FunctionTok{na.omit}\NormalTok{(.))))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{transformed\_migraine\_dataset}\SpecialCharTok{$}\NormalTok{y }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(transformed\_migraine\_dataset}\SpecialCharTok{$}\NormalTok{y)}
+\NormalTok{transformed\_migraine\_dataset}\SpecialCharTok{$}\NormalTok{se }\OtherTok{\textless{}{-}} \FunctionTok{as.numeric}\NormalTok{(transformed\_migraine\_dataset}\SpecialCharTok{$}\NormalTok{se)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# remove TEs or seTEs that are NA}
+\NormalTok{transformed\_migraine\_dataset }\OtherTok{\textless{}{-}}\NormalTok{ transformed\_migraine\_dataset }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{drop\_na}\NormalTok{(se) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{trt)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{crisp\_arm\_g }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{study =} \StringTok{"Crisp"}\NormalTok{, }\AttributeTok{year =} \StringTok{"2012"}\NormalTok{, }\AttributeTok{y =} \FloatTok{0.70}\NormalTok{, }\AttributeTok{se =} \FloatTok{0.7401}\NormalTok{, }\AttributeTok{na =} \DecValTok{3}\NormalTok{, }
+                          \AttributeTok{trt1name =} \StringTok{"Galcanezumab"}\NormalTok{, }\AttributeTok{trt2name =} \StringTok{"Eptinezumab"}\NormalTok{)}
+
+\NormalTok{crisp\_arm\_e }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{study =} \StringTok{"Crisp"}\NormalTok{, }\AttributeTok{year =} \StringTok{"2012"}\NormalTok{, }\AttributeTok{y =} \SpecialCharTok{{-}}\FloatTok{4.90}\NormalTok{, }\AttributeTok{se =} \FloatTok{0.5669}\NormalTok{, }\AttributeTok{na =} \DecValTok{3}\NormalTok{, }
+                          \AttributeTok{trt1name =} \StringTok{"Eptinezumab"}\NormalTok{, }\AttributeTok{trt2name =} \StringTok{"Placebo"}\NormalTok{)}
+
+\NormalTok{transformed\_migraine\_dataset }\OtherTok{\textless{}{-}}\NormalTok{ transformed\_migraine\_dataset }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{bind\_rows}\NormalTok{(crisp\_arm\_g, crisp\_arm\_e) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{arrange}\NormalTok{(year)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: table{-}1}
+\CommentTok{\#| table{-}cap: Table summarizing estimated mean differences in migraine days per month for each treatment compared to placebo, including results of heterogeneity tests.}
+\CommentTok{\# create net meta{-}analysis}
+\NormalTok{nma }\OtherTok{\textless{}{-}} \FunctionTok{netmeta}\NormalTok{(}\AttributeTok{TE =}\NormalTok{ y, }\AttributeTok{seTE =}\NormalTok{ se, }\AttributeTok{treat1 =}\NormalTok{ trt1name, }\AttributeTok{treat2 =}\NormalTok{ trt2name, }
+               \AttributeTok{studlab =}\NormalTok{ study, }\AttributeTok{data =}\NormalTok{ transformed\_migraine\_dataset, }
+               \AttributeTok{sm =} \StringTok{"MD"}\NormalTok{, }\AttributeTok{ref =} \StringTok{"Placebo"}\NormalTok{, }\AttributeTok{common =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{small.values =} \StringTok{"desirable"}\NormalTok{)}
+\FunctionTok{print}\NormalTok{(nma)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Number of studies: k = 11
+Number of pairwise comparisons: m = 13
+Number of treatments: n = 5
+Number of designs: d = 5
+
+Random effects model
+
+Treatment estimate (sm = 'MD', comparison: other treatments vs 'Placebo'):
+                  MD             95%-CI     z  p-value
+Botox A      -3.0000 [-5.6506; -0.3494] -2.22   0.0265
+Eptinezumab  -4.5503 [-6.4759; -2.6248] -4.63 < 0.0001
+Erenumab     -4.2010 [-5.3863; -3.0157] -6.95 < 0.0001
+Galcanezumab -2.0263 [-3.3823; -0.6703] -2.93   0.0034
+Placebo            .                  .     .        .
+
+Quantifying heterogeneity / inconsistency:
+tau^2 = 1.7773; tau = 1.3331; I^2 = 95.8% [93.8%; 97.2%]
+
+Tests of heterogeneity (within designs) and inconsistency (between designs):
+                     Q d.f.  p-value
+Total           190.97    8 < 0.0001
+Within designs  184.49    6 < 0.0001
+Between designs   6.47    2   0.0393
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: fig{-}2}
+\CommentTok{\#| fig{-}cap: This is a graphical visualization of the network meta{-}analysis, which compares all treatments within the network. The nodes represent interventions (treatment types), and edges are direct comparisons, weighted by the number of studies. Erenumab and galcanezumab have the most studies in this dataset. }
+
+\FunctionTok{netgraph}\NormalTok{(nma, }\AttributeTok{plastic =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{points =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col =} \StringTok{\textquotesingle{}darkblue\textquotesingle{}}\NormalTok{, }
+         \AttributeTok{thickness =} \StringTok{"number.of.studies"}\NormalTok{, }\AttributeTok{lwd =} \FloatTok{2.7}\NormalTok{, }\AttributeTok{cex.points =} \DecValTok{4}\NormalTok{, }
+         \AttributeTok{offset =} \FloatTok{0.05}\NormalTok{, }\AttributeTok{scale =} \FloatTok{1.1}\NormalTok{, }\AttributeTok{col.points =} \StringTok{\textquotesingle{}red\textquotesingle{}}\NormalTok{, }\AttributeTok{seq =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{mt-test_files/figure-pdf/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: fig{-}3}
+\CommentTok{\#| fig{-}cap: A forest plot of treatment effect estimates for all pairwise comparisons along with their corresponding 95\% confidence intervals, based on the standardized mean differences. Larger confidence intervals indicate less precision, while smaller intervals indicate greater precision.}
+\FunctionTok{forest}\NormalTok{(nma)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{mt-test_files/figure-pdf/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: fig{-}4}
+\CommentTok{\#| fig{-}cap: The rankogram is based on results from a random effects model assumption. It displays the probabilities of each treatment being ranked from 1 to 5, based on 1000 simulations. }
+
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{76}\NormalTok{)}
+\FunctionTok{rankogram}\NormalTok{(nma) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Rankogram (based on 1000 simulations)
+
+Random effects model: 
+
+                  1      2      3      4      5
+Botox A      0.1050 0.1620 0.4860 0.2390 0.0080
+Eptinezumab  0.5630 0.3180 0.1100 0.0090 0.0000
+Erenumab     0.3310 0.5070 0.1570 0.0050 0.0000
+Galcanezumab 0.0010 0.0130 0.2470 0.7380 0.0010
+Placebo      0.0000 0.0000 0.0000 0.0090 0.9910
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pg }\OtherTok{\textless{}{-}} \FunctionTok{rankogram}\NormalTok{(nma, }\AttributeTok{cumulative =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: fig{-}5}
+\CommentTok{\#| fig{-}cap: Plot of the rankogram above from a random effects model assumption.}
+\FunctionTok{plot}\NormalTok{(pg)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{mt-test_files/figure-pdf/unnamed-chunk-13-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#| label: fig{-}6}
+\CommentTok{\#| fig{-}cap: Table of SUCRA (Surface Under the Cumulative Ranking) probabilities for each treatment. Higher SUCRA values indicate greater efficacy of a treatment relative to others.}
+
+\FunctionTok{netrank}\NormalTok{(pg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+              SUCRA
+Eptinezumab  0.8562
+Erenumab     0.7888
+Botox A      0.5317
+Galcanezumab 0.3198
+Placebo      0.0035
+
+- based on 1000 simulations
+\end{verbatim}
+
+\section{References}\label{references}
+
+
+
+\end{document}

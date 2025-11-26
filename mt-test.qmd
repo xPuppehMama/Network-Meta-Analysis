@@ -1,0 +1,217 @@
+---
+title: ""
+format: pdf
+editor: visual
+---
+
+## Introduction
+Network Meta-Analysis (NMA) allows for the comparative relative efficacy and acceptability of interventions, such as galcanezumab and other treatments for chronic migraine, through randomized controlled trials (RCTs) [1]. These clinical trials form a network of observational evidence, allowing for both direct and indirect comparisons [2]. Prior to this NMA, a feasibility assessment was completed, revealing minimal concerns regarding heterogeneity across studies, implying that an NMA is appropriate. This NMA evaluates the reduction in monthly migraine days for galcanezumab in comparison to other treatments, including key comparators such as Botox A, eptinezumab, erenumab, and placebo.
+
+## Data and Methods
+The dataset is based on multiple 12-week observational studies from clinical trials, examining the reduction in monthly migraine days for participants from baseline to Week 12. To conduct the NMA, the data is transformed into a pairwise format, separating the treatment types into treatment 1 and treatment 2. These studies provide direct comparisons against the placebo. The placebo is to be used as a common comparator to estimate the relative efficacy between two interventions indirectly.
+
+When conducting the NMA, comparisons with missing treatment effect point estimates (TE), seTE, or zero TE values are not considered in the analysis. Therefore, two studies, Jones (1995) and Gaudi (2001), are removed, which results in the loss of evidence for the treatments galcanezumab and erenumab, respectively. Additionally, there is one three-arm study in this dataset. Since each comparison in the three-arm study should have its own effect size and standard error, we provide data for each pairwise comparison [3]. This includes (1) galcanezumab vs placebo, (2) galcanezumab vs eptinezumab, and (3) placebo vs eptinezumab. Given the MD and SE between galcanezumab and placebo, it is estimated that the MD between galcanezumab and eptinezumab is 0.70 and the SE is 0.7401. In total, the NMA includes data from 11 RCTs, comprising of 13 pairwise comparisons among 5 different treatments (Botox A, eptinezumab, erenumab, galcanezumab, and placebo). 
+
+A Frequentist random effects model was used to perform the NMA, to account for heterogeneity or variability across studies, even if minimal. The random effects model allows for the possibility that true effect sizes vary across studies, due to difference in patient populations, methodologies, and other treatment-influencing factors [4]. Assumptions of the Frequentist method includes transitivity, where treatments are similar in severity of chronic migraines, treatment dose or study quality, as well as congruence and consistency [4]. The netmeta package in R was used to conduct the NMA, encompassing tables and figures of the network, a forest plot, rankogram, and surface under the cumulative ranking (SUCRA) (all included in the Appendix). The chosen reference treatment, or the baseline against which all other treatments are compared, is the placebo. This allows us to see how galcanezumab and other treatments compare to this same baseline [3].
+
+## Results
+```{r}
+#| echo: false
+#| warning: false
+library(tidyverse)
+library(readxl)
+library(netmeta)
+chronic_migraine_dataset <- read_excel("Chronic_Migraine_Dataset.xlsx")
+transformed_migraine_dataset <- chronic_migraine_dataset |>
+  group_by(study, year) |>
+  mutate(trt1name = ifelse(trt != "Placebo", trt, NA),
+         trt2name = ifelse(trt == "Placebo", "Placebo", NA)) |>
+  summarise_all(list(~ first(na.omit(.))))
+transformed_migraine_dataset$y <- as.numeric(transformed_migraine_dataset$y)
+transformed_migraine_dataset$se <- as.numeric(transformed_migraine_dataset$se)
+transformed_migraine_dataset <- transformed_migraine_dataset |>
+  drop_na(se) |>
+  select(-trt)
+crisp_arm_g <- data.frame(study = "Crisp", year = "2012", y = 0.70, se = 0.7401, na = 3, trt1name = "Galcanezumab", trt2name = "Eptinezumab")
+
+crisp_arm_e <- data.frame(study = "Crisp", year = "2012", y = -4.90, se = 0.5669, na = 3, trt1name = "Eptinezumab", trt2name = "Placebo")
+
+transformed_migraine_dataset <- transformed_migraine_dataset |>
+  bind_rows(crisp_arm_g, crisp_arm_e) |>
+  arrange(year)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+nma <- netmeta(TE = y, seTE = se, treat1 = trt1name, treat2 = trt2name, studlab = study, data = transformed_migraine_dataset, sm = "MD", ref = "Placebo", common = FALSE, small.values = "desirable")
+```
+
+Shown in the appendix (table 2), the four treatments (Botox A, eptinezumab, erenumab, and galcanezumab) reveal significance in reducing the monthly migraine days (alpha = 0.05). Eptinezumab and erenumab demonstrate the largest effects (p < 0.001), followed by Botox A and galcanezumab. Heterogeneity was detected within and between designs (p < 0.05), suggesting there is variability in treatment effects across studies.
+```{r}
+#| echo: false
+#| warning: false
+#| label: fig-1
+#| fig-cap: A forest plot of treatment effect estimates for all pairwise comparisons along with their corresponding 95% confidence intervals, based on the standardized mean differences. Larger confidence intervals indicate less precision, while smaller intervals indicate greater precision.
+
+forest(nma)
+```
+
+As all treatments have point estimates to the left of the line of no effect (do not cross on/near the line of no effect), this reveals that all four treatments perform better than the comparator, placebo. Eptinezumab shows the narrowest confidence interval [-5.65; -0.35], indicating a significant reduction in monthly migraine days. 
+```{r table-2, echo=FALSE, warning=FALSE}
+migraine_treatments_sucra <- data.frame(
+  Treatment = c("Eptinezumab", "Erenumab", "Botox A", "Galcanezumab", "Placebo"),
+  SUCRA = c(0.8562, 0.7888, 0.5317, 0.3198, 0.0035)
+)
+knitr::kable(migraine_treatments_sucra, caption = "Table of SUCRA (Surface Under the Cumulative Ranking) probabilities for each treatment. Higher SUCRA values indicate greater efficacy of a treatment relative to others.")
+```
+SUCRA provides rank probabilities for which interventions performs the best in terms of efficacy from the NMA. According to the results, the treatment with the highest probability, ranking first, is eptinezumab (SUCRA = 0.8562), relative to other treatments in the study. Erenumab closely follows (SUCRA = 0.7888).
+
+The results of this NMA are consistent with existing literature, in which anti-CGRP (Calcitonin Gene-Related Peptide) monoclonal antibodies is beneficial and preferred in managing chronic migraines. A study from 2023 found that "for both episodic migraine and chronic migraine, STC (simulated treatment comparison) analysis indicated that eptinezumab treatment was favorable over other anti-CGRP monoclonal antibodies in terms of reduction in monthly migraine days" (Fawsitt, et al.) [5]. Additionally, another study, revealed that galcanezumab (120 mg) had considerable reduction in mean migraine days, followed by eptinezumab and erenumab. However, while galcanezumab (120 mg) showed the most substantial reduction, eptinezumab (100 mg) had a a more favorable safety profile (Haridas, et al.) [6]. Overall, anti-CGRP monoclonal antibodies have high efficacy in reducing chronic migraines, with Botox A and placebo showing less effectiveness. This NMA provides evidence (at a significant level) for the efficacy of galcanezumab in reducing monthly migraine days in patients with chronic migraines. However, when comparing the relative effectiveness of other treatments, eptinezumab and erenumab were favored.
+
+## Concerns Regarding the Dataset
+In constructing the NMA, studies with missing treatment effect point estimates in the dataset were not considered, including Jones (1995) and Gaudi (2001) for the treatments galcanezumab and erenumab. One concern from the dataset is heterogeneity, indicated by the heterogeneity test results. This variability suggests there were differences in treatment effects across studies, possibly due to differences in study populations and methodologies. To address this issue, a random-effects model was used rather than a fixed-effects model. A simplified assumption made for the NMA was that the outcome of mean difference (MD) in monthly migraine days was consistent across the RCTs. Additionally, two assumptions of NMA (transitivity and coherence) depend on the consistency between the direct and indirect evidence for the same treatment comparison.
+
+## Interpretation of any treatment ranking statistics 
+The Surface Under the Cumulative Ranking (SUCRA) values quantify the probabilities of interventions performing best in terms of efficacy within the NMA, on a ranking scale. These values are generated based on 1000 simulations from the NMA, ranging from 0 to 1. Higher SUCRA values indicate greater efficacy of a treatment relative to other treatments in the analysis. In this NMA, Eptinezumab had the highest SUCRA value (0.8562), revealing itself to be the most effective treatment option for reducing monthly migraine days. Following closely, erenumab had a high SUCRA value (0.7888), followed by Botox A (0.5317) and galcanezumab (0.3198), and placebo had the lowest probability (0.0035). These rankings can be used to compare the relative effectiveness of these treatments.
+
+## Appendix
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(netmeta)
+chronic_migraine_dataset <- read_excel("Chronic_Migraine_Dataset.xlsx")
+```
+
+
+```{r}
+# transform dataset to separate treatment type and placebo
+transformed_migraine_dataset <- chronic_migraine_dataset |>
+  group_by(study, year) |>
+  mutate(trt1name = ifelse(trt != "Placebo", trt, NA),
+         trt2name = ifelse(trt == "Placebo", "Placebo", NA)) |>
+  summarise_all(list(~ first(na.omit(.))))
+```
+
+```{r}
+transformed_migraine_dataset$y <- as.numeric(transformed_migraine_dataset$y)
+transformed_migraine_dataset$se <- as.numeric(transformed_migraine_dataset$se)
+```
+
+```{r}
+# remove TEs or seTEs that are NA
+transformed_migraine_dataset <- transformed_migraine_dataset |>
+  drop_na(se) |>
+  select(-trt)
+```
+
+```{r}
+crisp_arm_g <- data.frame(study = "Crisp", year = "2012", y = 0.70, se = 0.7401, na = 3, 
+                          trt1name = "Galcanezumab", trt2name = "Eptinezumab")
+
+crisp_arm_e <- data.frame(study = "Crisp", year = "2012", y = -4.90, se = 0.5669, na = 3, 
+                          trt1name = "Eptinezumab", trt2name = "Placebo")
+
+transformed_migraine_dataset <- transformed_migraine_dataset |>
+  bind_rows(crisp_arm_g, crisp_arm_e) |>
+  arrange(year)
+```
+
+```{r}
+
+#| label: table-2
+#| table-cap: Table summarizing estimated mean differences in migraine days 
+#| per month for each treatment compared to placebo, including results 
+#| of heterogeneity tests.
+# create net meta-analysis
+nma <- netmeta(TE = y, seTE = se, treat1 = trt1name, treat2 = trt2name, 
+               studlab = study, data = transformed_migraine_dataset, 
+               sm = "MD", ref = "Placebo", common = FALSE, small.values = "desirable")
+print(nma)
+```
+
+```{r}
+
+#| label: fig-2
+#| fig-cap: This is a graphical visualization of 
+#| the network meta-analysis, which compares all 
+#| treatments within the network. The nodes represent 
+#| interventions (treatment types), and edges are 
+#| direct comparisons, weighted by the number of studies. 
+#| Erenumab and galcanezumab have the most studies in 
+#| this dataset. 
+
+netgraph(nma, plastic = FALSE, points = TRUE, col = 'darkblue', 
+         thickness = "number.of.studies", lwd = 2.7, cex.points = 4, 
+         offset = 0.05, scale = 1.1, col.points = 'red', seq = 1)
+```
+
+```{r}
+
+#| label: fig-3
+#| fig-cap: A forest plot of treatment effect estimates 
+#| for all pairwise comparisons along with their 
+#| corresponding 95% confidence intervals, based on 
+#| the standardized mean differences. Larger confidence 
+#| intervals indicate less precision, while smaller 
+#| intervals indicate greater precision.
+forest(nma)
+```
+
+
+```{r}
+
+#| label: table-3
+#| table-cap: The rankogram is based on results from
+#| a random effects model assumption. It displays
+#| the probabilities of each treatment being ranked
+#| from 1 to 5, based on 1000 simulations. 
+
+set.seed(76)
+rankogram(nma) 
+pg <- rankogram(nma, cumulative = TRUE)
+```
+
+
+```{r}
+
+#| label: fig-4
+#| fig-cap: Plot of the rankogram above from 
+#| a random effects model assumption.
+plot(pg)
+```
+
+
+```{r}
+
+#| label: table-4
+#| table-cap: Table of SUCRA (Surface Under the 
+#| Cumulative Ranking) probabilities for each 
+#| treatment. Higher SUCRA values indicate greater 
+#| efficacy of a treatment relative to others.
+
+netrank(pg)
+
+```
+
+# References
+
+[1] Salanti, Georgia. "A 10 minutes introduction to Network Meta analysis Georgia Salanti." YouTube. Oct 21, 2016. https://www.youtube.com/watch?v=xaCEiB9MI6c.
+
+[2] TSU Guidelines. "Network Meta-Analysis in Guidelines." YouTube. June 27, 2022.  https://www.youtube.com/watch?v=VFIUR1yJIo4. 
+
+[3] Medin, Darko. "Network Meta-Analysis in R Part II: Effects and Forest Plots." LinkedIn. Feb 20, 2023. https://www.linkedin.com/pulse/network-meta-analysis-r-part-ii-effects-forest-plots-darko-medin-qvbef.
+
+[4] Sadeghirad, Behnam. "Theory and practice of Bayesian and frequentist frameworks for network meta-analysis." BMJ Journals. https://ebm.bmj.com/content/28/3/204.long.
+
+[5] Fawsitt CG, Thom H, Regnier SA, Lee XY, Kymes S, Vase L. "Comparison of indirect treatment methods in migraine prevention to address differences in mode of administration." J Comp Eff Res. 2023 Jul;12(7):e230021. doi: 10.57264/cer-2023-0021. Epub 2023 May 24. PMID: 37222593; PMCID: PMC10508308.
+
+[6] Haridas MP, Tripathy A, Maiti R, Srinivasan A. "Efficacy and Safety of Anti-CGRP Monoclonal Antibodies in Prevention of Chronic Migraine: A Bayesian Network Meta-analysis." Clin Psychopharmacol Neurosci. 2024 Feb 29;22(1):23-32. doi: 10.9758/cpn.23.1109. Epub 2023 Nov 8. PMID: 38247409; PMCID: PMC10811399.
+
+[7] "Network Meta-Analysis using Frequentist Methods." Jan 11, 2024. https://cran.r-project.org/web/packages/netmeta/netmeta.pdf.
+
+[9] Medin, Darko. "Network Meta-analysis in R part 1." LinkedIn. March 21, 2024.  https://darkomedin.com/network-meta-analysis-in-r1.
+
+[10] ESMARConf. "ESMARConf2023: netmeta tutorial." YouTube. March 30, 2023. https://www.youtube.com/watch?v=-2x2a3JDOlM.
+

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="My My Tran">
+<meta name="dcterms.date" content="2024-06-22">
+
+<title>assessment-final-mt</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="mt-test_files/libs/clipboard/clipboard.min.js"></script>
+<script src="mt-test_files/libs/quarto-html/quarto.js"></script>
+<script src="mt-test_files/libs/quarto-html/popper.min.js"></script>
+<script src="mt-test_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="mt-test_files/libs/quarto-html/anchor.min.js"></script>
+<link href="mt-test_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="mt-test_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="mt-test_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="mt-test_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="mt-test_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">assessment-final-mt</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>My My Tran </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 22, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Network meta-analysis (NMA) allows for the comparative relative efficacy and acceptability of interventions, such as galcanezumab and other treatments for chronic migraine, through randomized controlled trials (RCTs) [1]. These clinical trials form a network of observational evidence, allowing for both direct and indirect comparisons. Prior to this NMA, a feasibility assessment was completed, revealing minimal concerns regarding heterogeneity across studies, implying that an NMA is appropriate. This NMA evaluates the reduction in monthly migraine days for galcanezumab in comparison to other treatments, including key comparators such as Botox A, eptinezumab, erenumab, and placebo.</p>
+</section>
+<section id="data-and-methods" class="level1">
+<h1>Data and Methods</h1>
+<p>This dataset is based on multiple 12-week observational studies of clinical trials conducted on participants, on their reduction in monthly migraine days from baseline to Week 12. It is comprised of the relative mean difference versus placebo in the reduction of monthly migraine days (y), the standard error in the mean difference (se), and the number of treatment arms in the study (na).</p>
+<p>We transform the data from long format into a pairwise format, separating the treatment types into treatment 1 and treatment 2. These studies provide direct comparisons against the placebo. Using placebo as the common comparator, we can estimate the relative efficacy between two interventions indirectly.</p>
+<p>When constructing the network meta-analysis, comparisons with missing treatment effect point estimates (TE), seTE, zero TE values are not considered in the analysis. Therefore, two studies, Jones (1995), Gaudi (2001), are excluded, which loses pieces of evidence for the treatments galcanezumab and erenumab, respectively. Additionally, there is one three-arm study in this dataset. Since each comparison in the three-arm study should have its own effect size and standard error, we provide data for each pairwise comparison [2]. This includes (1) galcanezumab vs placebo, (2) galcanezumab vs eptinezumab, and (3) placebo vs eptinezumab. Given the MD and SE between galcanezumab and placebo, it is estimated that the MD between galcanezumab and eptinezumab is 0.70 and the SE is 0.7401.</p>
+<p>Therefore, the NMA includes data from 11 RCTS, comprising 13 pairwise comparisons among 5 treatments (Botox A, eptinezumab, erenumab, galcanezumab, and placebo).</p>
+<p>The method used was a Frequentist random effects model to account for heterogeneity or variability across studies, even if minimal. We are interested in the random effects model as it allows for the possibility that true effect sizes vary across studies. The studies can differ in patient populations, methodologies, and other treatment-influencing factors [3]. Assumptions of the Frequentist method include transitivity, which are different treatments that are similar in severity of chronic migraines, treatment dose or study quality, and congruence and consistency [4].</p>
+<p>To conduct the NMA using the Frequentist approach, we use the netmeta package in R [5]. The chosen reference treatment, or the baseline against which all other treatments are compared is the placebo. This allows us to see how galcanezumab and other treatments compare to this same baseline [6].</p>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="mt-test_files/figure-html/fig-1-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: This is a graphical visualization of the network meta-analysis, which compares all treatments within the network. The nodes represent interventions (treatment types), and edges are direct comparisons, weighted by the number of studies. Erenumab and galcanezumab have the most studies in this dataset.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 11
+Number of pairwise comparisons: m = 13
+Number of treatments: n = 5
+Number of designs: d = 5
+
+Random effects model
+
+Treatment estimate (sm = 'MD', comparison: other treatments vs 'Placebo'):
+                  MD             95%-CI     z  p-value
+Botox A      -3.0000 [-5.6506; -0.3494] -2.22   0.0265
+Eptinezumab  -4.5503 [-6.4759; -2.6248] -4.63 &lt; 0.0001
+Erenumab     -4.2010 [-5.3863; -3.0157] -6.95 &lt; 0.0001
+Galcanezumab -2.0263 [-3.3823; -0.6703] -2.93   0.0034
+Placebo            .                  .     .        .
+
+Quantifying heterogeneity / inconsistency:
+tau^2 = 1.7773; tau = 1.3331; I^2 = 95.8% [93.8%; 97.2%]
+
+Tests of heterogeneity (within designs) and inconsistency (between designs):
+                     Q d.f.  p-value
+Total           190.97    8 &lt; 0.0001
+Within designs  184.49    6 &lt; 0.0001
+Between designs   6.47    2   0.0393</code></pre>
+</div>
+</div>
+<p>The four treatments (Botox A, Eptinezumab, Erenumab, and Galcanezumab reveal significance in reducing the monthly days of a migraine days (alpha = 0.05), with Eptinezumab and Erenumab having the largest effects (p &lt; 0.001). Additionally, heterogeneity was detected (p &lt; 0.0001), suggesting there is variability in treatment effects across studies.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mt-test_files/figure-html/table-2-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>There are 121,577 observations in the original dataset along with summary statistics (minimum, maximum, median, mean, and quantiles) for our variables of interest. Our predictor variables are race (categorical), deyo (median of 1 and mean of 1.023, indicating more patients with mild severity), and our rescaled variable age_cent has a mean of 0. Length of stay (LOS_binary) has a mean of 0.022.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rankogram (based on 1000 simulations)
+
+Random effects model: 
+
+                  1      2      3      4      5
+Botox A      0.1050 0.1620 0.4860 0.2390 0.0080
+Eptinezumab  0.5630 0.3180 0.1100 0.0090 0.0000
+Erenumab     0.3310 0.5070 0.1570 0.0050 0.0000
+Galcanezumab 0.0010 0.0130 0.2470 0.7380 0.0010
+Placebo      0.0000 0.0000 0.0000 0.0090 0.9910</code></pre>
+</div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="mt-test_files/figure-html/table-3-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>There are 121,577 observations in the original dataset along with summary statistics (minimum, maximum, median, mean, and quantiles) for our variables of interest. Our predictor variables are race (categorical), deyo (median of 1 and mean of 1.023, indicating more patients with mild severity), and our rescaled variable age_cent has a mean of 0. Length of stay (LOS_binary) has a mean of 0.022.</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              SUCRA
+Eptinezumab  0.8562
+Erenumab     0.7888
+Botox A      0.5317
+Galcanezumab 0.3198
+Placebo      0.0035
+
+- based on 1000 simulations</code></pre>
+</div>
+</div>
+</section>
+<section id="concerns-with-regard-to-the-dataset." class="level1">
+<h1>Concerns with regard to the dataset.</h1>
+</section>
+<section id="interpretation-of-any-treatment-ranking-statistics" class="level1">
+<h1>Interpretation of any treatment ranking statistics</h1>
+</section>
+<section id="appendix" class="level1">
+<h1>Appendix</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(netmeta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>chronic_migraine_dataset <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"Chronic_Migraine_Dataset.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transform dataset to separate treatment type and placebo</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>transformed_migraine_dataset <span class="ot">&lt;-</span> chronic_migraine_dataset <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(study, year) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">trt1name =</span> <span class="fu">ifelse</span>(trt <span class="sc">!=</span> <span class="st">"Placebo"</span>, trt, <span class="cn">NA</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">trt2name =</span> <span class="fu">ifelse</span>(trt <span class="sc">==</span> <span class="st">"Placebo"</span>, <span class="st">"Placebo"</span>, <span class="cn">NA</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_all</span>(<span class="fu">list</span>(<span class="sc">~</span> <span class="fu">first</span>(<span class="fu">na.omit</span>(.))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>transformed_migraine_dataset<span class="sc">$</span>y <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(transformed_migraine_dataset<span class="sc">$</span>y)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>transformed_migraine_dataset<span class="sc">$</span>se <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(transformed_migraine_dataset<span class="sc">$</span>se)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: NAs introduced by coercion</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove TEs or seTEs that are NA</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>transformed_migraine_dataset <span class="ot">&lt;-</span> transformed_migraine_dataset <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(se) <span class="sc">|&gt;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>trt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>crisp_arm_g <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">study =</span> <span class="st">"Crisp"</span>, <span class="at">year =</span> <span class="st">"2012"</span>, <span class="at">y =</span> <span class="fl">0.70</span>, <span class="at">se =</span> <span class="fl">0.7401</span>, <span class="at">na =</span> <span class="dv">3</span>, <span class="at">trt1name =</span> <span class="st">"Galcanezumab"</span>, <span class="at">trt2name =</span> <span class="st">"Eptinezumab"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>crisp_arm_e <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">study =</span> <span class="st">"Crisp"</span>, <span class="at">year =</span> <span class="st">"2012"</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">4.90</span>, <span class="at">se =</span> <span class="fl">0.5669</span>, <span class="at">na =</span> <span class="dv">3</span>, <span class="at">trt1name =</span> <span class="st">"Eptinezumab"</span>, <span class="at">trt2name =</span> <span class="st">"Placebo"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>transformed_migraine_dataset <span class="ot">&lt;-</span> transformed_migraine_dataset <span class="sc">|&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(crisp_arm_g, crisp_arm_e) <span class="sc">|&gt;</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create net meta-analysis</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>nma <span class="ot">&lt;-</span> <span class="fu">netmeta</span>(<span class="at">TE =</span> y, <span class="at">seTE =</span> se, <span class="at">treat1 =</span> trt1name, <span class="at">treat2 =</span> trt2name, <span class="at">studlab =</span> study, <span class="at">data =</span> transformed_migraine_dataset, <span class="at">sm =</span> <span class="st">"MD"</span>, <span class="at">ref =</span> <span class="st">"Placebo"</span>, <span class="at">common =</span> <span class="cn">FALSE</span>, <span class="at">small.values =</span> <span class="st">"desirable"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of studies: k = 11
+Number of pairwise comparisons: m = 13
+Number of treatments: n = 5
+Number of designs: d = 5
+
+Random effects model
+
+Treatment estimate (sm = 'MD', comparison: other treatments vs 'Placebo'):
+                  MD             95%-CI     z  p-value
+Botox A      -3.0000 [-5.6506; -0.3494] -2.22   0.0265
+Eptinezumab  -4.5503 [-6.4759; -2.6248] -4.63 &lt; 0.0001
+Erenumab     -4.2010 [-5.3863; -3.0157] -6.95 &lt; 0.0001
+Galcanezumab -2.0263 [-3.3823; -0.6703] -2.93   0.0034
+Placebo            .                  .     .        .
+
+Quantifying heterogeneity / inconsistency:
+tau^2 = 1.7773; tau = 1.3331; I^2 = 95.8% [93.8%; 97.2%]
+
+Tests of heterogeneity (within designs) and inconsistency (between designs):
+                     Q d.f.  p-value
+Total           190.97    8 &lt; 0.0001
+Within designs  184.49    6 &lt; 0.0001
+Between designs   6.47    2   0.0393</code></pre>
+</div>
+</div>
+<p>The treatments reduce the monthly days of a migraine days. All treatments are significant, with Eptinezumab and Erenumab having the largest effects (p &lt; 0.001).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">netgraph</span>(nma, <span class="at">plastic =</span> <span class="cn">FALSE</span>, <span class="at">points =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">'darkblue'</span>, <span class="at">thickness =</span> <span class="st">"number.of.studies"</span>, <span class="at">lwd =</span> <span class="fl">2.7</span>, <span class="at">cex.points =</span> <span class="dv">4</span>, <span class="at">offset =</span> <span class="fl">0.05</span>, <span class="at">scale =</span> <span class="fl">1.1</span>, <span class="at">col.points =</span> <span class="st">'red'</span>, <span class="at">seq =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mt-test_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Basic network effects forest plot</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">forest</span>(nma)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mt-test_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Standardized mean differences Larger confidence intervals, less precision</p>
+<p>All of the studies do not cross the line of no effect, revealing significance</p>
+<p>Represents the effect size, such as mean difference (MD), odds ratio (OR), risk ratio (RR), etc. Usually includes a line at 0 (for MD) or 1 (for OR/RR) indicating no effect or no difference between treatments. A vertical line at 0 (for MD) or 1 (for OR/RR) represents the line of no effect. Each horizontal line represents the confidence interval (CI) of the effect size for a particular comparison. The square or diamond at the center of each line represents the point estimate of the effect size. For MD, a point estimate to the left of 0 indicates that the treatment is better than the comparator (e.g., less pain), Narrow intervals indicate more precise estimates, while wider intervals indicate less precision.</p>
+<p>Eptinezumab shows the most precision shows a significant reduction in migraines, with a narrower CI indicating more precise estimates.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">76</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rankogram</span>(nma) <span class="co"># probabilities that any of our 5 treatments are the best treatment </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rankogram (based on 1000 simulations)
+
+Random effects model: 
+
+                  1      2      3      4      5
+Botox A      0.1050 0.1620 0.4860 0.2390 0.0080
+Eptinezumab  0.5630 0.3180 0.1100 0.0090 0.0000
+Erenumab     0.3310 0.5070 0.1570 0.0050 0.0000
+Galcanezumab 0.0010 0.0130 0.2470 0.7380 0.0010
+Placebo      0.0000 0.0000 0.0000 0.0090 0.9910</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pg <span class="ot">&lt;-</span> <span class="fu">rankogram</span>(nma, <span class="at">cumulative =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="mt-test_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">netrank</span>(pg) <span class="co"># average proportion that any of our treatments is better than other interventions</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              SUCRA
+Eptinezumab  0.8562
+Erenumab     0.7888
+Botox A      0.5317
+Galcanezumab 0.3198
+Placebo      0.0035
+
+- based on 1000 simulations</code></pre>
+</div>
+</div>
+<p>It displays the probabilities (based on simulations) of each treatment being ranked from 1 to 5. The output you’ve provided shows the probabilities for each treatment (Botox A, Eptinezumab, Erenumab, Galcanezumab, Placebo) being ranked from 1st to 5th based on 1000 simulations.</p>
+<p>For Botox A, in 10.5% of simulations, it was ranked 1st, in 16.2% it was ranked 2nd, and so on. For Placebo, in 99.1% of simulations, it was ranked 5th.</p>
+<p>The rankogram is based on results from a random effects model assumption. This model allows for variability in treatment effects across studies, which is reflected in the distribution of ranks seen in the rankogram.</p>
+<p>When heterogeneity is minimal, a fixed effects model might be appropriate. When heterogeneity is minimal, the assumption that all studies are estimating the same underlying effect size is more likely to hold true. This simplifies the model as less variation needs to be accounted for, making the frequentist approach both efficient and effective. If there is some minor heterogeneity, a random effects model can still be used to account for this small degree of variability.</p>
+<p>Eptinezumab and Erenumab are likely to be the most effective treatments, followed by Botox A and Galcanezumab.</p>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
